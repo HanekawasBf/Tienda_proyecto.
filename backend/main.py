@@ -94,6 +94,16 @@ def actualizar_producto(datos: ProductoUpdateSchema):
     return {"mensaje": "Producto actualizado correctamente.", "producto": producto_encontrado.to_dict()}
 
 
+@app.delete("/productos/{producto_id}")
+def eliminar_producto(producto_id: int):
+    for producto in database.productos_db:
+        if producto.id == producto_id:
+            database.productos_db.remove(producto)
+            return {"mensaje": f"Producto {producto_id} eliminado correctamente."}
+
+    raise HTTPException(status_code=404, detail="Producto no encontrado.")
+
+
 # CLIENTES 
 
 @app.get("/clientes")
@@ -143,6 +153,16 @@ def actualizar_cliente(datos: ClienteUpdateSchema):
         cliente_encontrado.correo = datos.correo
 
     return {"mensaje": "Cliente actualizado correctamente.", "cliente": cliente_encontrado.to_dict()}
+
+
+@app.delete("/clientes/{cliente_id}")
+def eliminar_cliente(cliente_id: int):
+    for cliente in database.clientes_db:
+        if cliente.id == cliente_id:
+            database.clientes_db.remove(cliente)
+            return {"mensaje": f"Cliente {cliente_id} eliminado correctamente."}
+
+    raise HTTPException(status_code=404, detail="Cliente no encontrado.")
 
 
 @app.get("/")
