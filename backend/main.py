@@ -13,11 +13,13 @@ Endpoints:
   DELETE /clientes/{id}        -> eliminar un cliente
 """
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 
 import database
+from models import Producto, Cliente
+from schemas import ProductoSchema, ClienteSchema
 
 app = FastAPI(title="Tienda Online API")
 
@@ -51,6 +53,24 @@ def obtener_productos(nombre: Optional[str] = Query(None), categoria: Optional[s
     return resultado
 
 
+@app.post("/productos")
+def crear_producto(datos: ProductoSchema):
+    try:
+        nuevo = Producto(
+            id=database.siguiente_id_producto,
+            nombre=datos.nombre,
+            precio=datos.precio,
+            stock=datos.stock,
+            categoria=datos.categoria,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    database.productos_db.append(nuevo)
+    database.siguiente_id_producto += 1
+    return {"mensaje": "Producto creado correctamente.", "producto": nuevo.to_dict()}
+
+
 # CLIENTES 
 
 @app.get("/clientes")
@@ -62,6 +82,23 @@ def obtener_clientes(nombre: Optional[str] = Query(None)):
             resultado.append(cliente.to_dict())
 
     return resultado
+
+
+@app.post("/clientes")
+def crear_cliente(datos: ClienteSchema):
+    try:
+        nuevo = Cliente(
+            id=database.siguiente_id_cliente,
+            nombre=datos.nombre,
+            edad=datos.edad,
+            correo=datos.correo,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    database.clientes_db.append(nuevo)
+    database.siguiente_id_cliente += 1
+    return {"mensaje": "Cliente creado correctamente.", "cliente": nuevo.to_dict()}
 
 
 @app.get("/")
