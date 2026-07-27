@@ -19,7 +19,7 @@ from typing import Optional
 
 import database
 from models import Producto, Cliente
-from schemas import ProductoSchema, ClienteSchema
+from schemas import ProductoSchema, ProductoUpdateSchema, ClienteSchema, ClienteUpdateSchema
 
 app = FastAPI(title="Tienda Online API")
 
@@ -71,6 +71,29 @@ def crear_producto(datos: ProductoSchema):
     return {"mensaje": "Producto creado correctamente.", "producto": nuevo.to_dict()}
 
 
+@app.post("/productos/actualizar")
+def actualizar_producto(datos: ProductoUpdateSchema):
+    producto_encontrado = None
+    for producto in database.productos_db:
+        if producto.id == datos.id:
+            producto_encontrado = producto
+            break
+
+    if producto_encontrado is None:
+        raise HTTPException(status_code=404, detail="Producto no encontrado.")
+
+    if datos.nombre is not None:
+        producto_encontrado.nombre = datos.nombre
+    if datos.precio is not None:
+        producto_encontrado.precio = datos.precio
+    if datos.stock is not None:
+        producto_encontrado.stock = datos.stock
+    if datos.categoria is not None:
+        producto_encontrado.categoria = datos.categoria.lower()
+
+    return {"mensaje": "Producto actualizado correctamente.", "producto": producto_encontrado.to_dict()}
+
+
 # CLIENTES 
 
 @app.get("/clientes")
@@ -99,6 +122,27 @@ def crear_cliente(datos: ClienteSchema):
     database.clientes_db.append(nuevo)
     database.siguiente_id_cliente += 1
     return {"mensaje": "Cliente creado correctamente.", "cliente": nuevo.to_dict()}
+
+
+@app.post("/clientes/actualizar")
+def actualizar_cliente(datos: ClienteUpdateSchema):
+    cliente_encontrado = None
+    for cliente in database.clientes_db:
+        if cliente.id == datos.id:
+            cliente_encontrado = cliente
+            break
+
+    if cliente_encontrado is None:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado.")
+
+    if datos.nombre is not None:
+        cliente_encontrado.nombre = datos.nombre
+    if datos.edad is not None:
+        cliente_encontrado.edad = datos.edad
+    if datos.correo is not None:
+        cliente_encontrado.correo = datos.correo
+
+    return {"mensaje": "Cliente actualizado correctamente.", "cliente": cliente_encontrado.to_dict()}
 
 
 @app.get("/")
