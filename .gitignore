@@ -1,0 +1,22 @@
+# --- Python / Backend ---
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# --- Entorno / configuración local ---
+.env
+*.log
+
+# --- Editor / SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Node (por si el frontend llega a usar npm más adelante) ---
+node_modules/
