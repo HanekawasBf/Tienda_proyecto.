@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <span class="navbar-brand">Tienda Online</span>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-light">Carrito: <span id="contador-carrito" class="badge bg-primary">0</span></span>
+                <button id="btn-logout" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <ul class="nav nav-tabs mb-3" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-productos" type="button">Productos</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-carrito" type="button">Carrito</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-clientes" type="button">Clientes</button></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <!-- TAB PRODUCTOS  -->
+            <div class="tab-pane fade show active" id="tab-productos">
+                <div class="row mb-3 g-2 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label">Buscar por nombre</label>
+                        <input type="text" id="buscar-nombre" class="form-control" placeholder="Ej. Laptop" autocomplete="off">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Categoría</label>
+                        <input type="text" id="buscar-categoria" class="form-control" placeholder="Ej. electronica" autocomplete="off">
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-nuevo-producto">
+                            + Nuevo producto
+                        </button>
+                    </div>
+                </div>
+
+                <div id="contenedor-productos" class="row"></div>
+            </div>
+
+            <!-- TAB CARRITO  -->
+            <div class="tab-pane fade" id="tab-carrito">
+                <div id="contenedor-carrito"></div>
+            </div>
+
+            <!-- TAB CLIENTES  -->
+            <div class="tab-pane fade" id="tab-clientes">
+                <table class="table table-striped bg-white">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Edad</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-clientes-body"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal: nuevo producto -->
+    <div class="modal fade" id="modal-nuevo-producto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form-nuevo-producto">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Nuevo producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" id="nuevo-nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Precio</label>
+                            <input type="number" step="0.01" min="0" id="nuevo-precio" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stock</label>
+                            <input type="number" min="0" id="nuevo-stock" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <input type="text" id="nuevo-categoria" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
